@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "coffee-api"
+version = "0.1.0"
+description = ""
+authors = ["tomQuintana <tomas.quintana@gojiraf.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.6"
+uvicorn = "^0.34.0"
+sqlmodel = "^0.0.22"
+asyncio = "^3.4.3"
+poetry-plugin-export = "^1.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
