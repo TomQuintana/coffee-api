@@ -1,9 +1,12 @@
 {
-  "version": 1,
+  "version": 2,
   "builds": [
     {
       "src": "src/main.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "installCommand": "curl -sSL https://install.python-poetry.org | python3 - && poetry install --no-dev"
+      }
     }
   ],
   "routes": [
