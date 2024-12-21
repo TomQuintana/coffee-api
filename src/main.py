@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.sql import text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -19,4 +19,5 @@ async def test_db_connection(session: AsyncSession = Depends(get_session)):
         return {"status": "success", "message": "Database connected!"}
     except Exception as e:
         print(e)
+        raise HTTPException(status_code=500, detail="Database connection error")
         return {"status": "error", "message": str(e)}
