@@ -5,7 +5,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from .settings import settings
 
-async_engine = create_async_engine(settings.POSTGRESQL_URL, future=True, asyncio=True)
+async_engine = create_async_engine(settings.POSTGRESQL_URL, future=True)
 
 
 async def init_db() -> None:
