@@ -1,9 +1,13 @@
+import logging
+
 from fastapi import HTTPException
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from ..models.user.user_model import User
 from ..utils.auth_utils import hash_password
+
+logger = logging.getLogger(__name__)
 
 
 class UserService:
@@ -37,9 +41,7 @@ class UserService:
 
             session.add(new_user)
 
-            await session.commit()
-
             return new_user
         except Exception as e:
-            print(e)
+            logger.error(f"Error creating user: {e}")
             raise e
