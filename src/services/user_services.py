@@ -27,21 +27,23 @@ class UserService:
 
     async def create_user(self, user_data: dict, session: AsyncSession):
         try:
-            user_data_dict = user_data.model_dump()
+            async with session.begin():
+                user_data_dict = user_data.model_dump()
 
-            is_user_exists = await self.user_exists(
-                user_data_dict["email"], user_data_dict["username"], session
-            )
-            if is_user_exists:
-                raise HTTPException(status_code=400, detail="User already exists")
+                is_user_exists = await self.user_exists(
+                    user_data_dict["email"], user_data_dict["username"], session
+                )
+                if is_user_exists:
+                    raise HTTPException(status_code=400, detail="User already exists")
 
-            new_user = User(**user_data_dict)
+                new_user = User(**user_data_dict)
 
-            new_user.hashed_password = hash_password(user_data_dict["password"])
+                new_user.hashed_password = hash_password(user_data_dict["password"])
 
-            session.add(new_user)
+                session.add(new_user)
+                await session.commit()
 
-            return new_user
+                return new_user
         except Exception as e:
             logger.error(f"Error creating user: {e}")
             raise e
