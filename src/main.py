@@ -1,10 +1,22 @@
+from contextlib import asynccontextmanager
+
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.sql import text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from .config.database import get_session
+from .config.database import get_session, init_db
+from .routes.user_routes import user_router
 
-app = FastAPI(title="Coffee Api")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_db()
+    yield
+
+
+app = FastAPI(title="Coffee Api", lifespan=lifespan)
+
+app.include_router(user_router)
 
 
 @app.get("/", status_code=200)
