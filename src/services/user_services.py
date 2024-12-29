@@ -27,25 +27,22 @@ class UserService:
         return True if user is not None else False
 
     async def create_user(self, user_data: dict, session: AsyncSession):
-        try:
-            async with session.begin():
+        async with session.begin():  # Inicia una transacción
+            try:
                 user_data_dict = user_data.model_dump()
 
                 is_user_exists = await self.user_exists(
                     user_data_dict["email"], user_data_dict["username"], session
                 )
                 if is_user_exists:
-                    print("User already exists")
                     raise HTTPException(status_code=400, detail="User already exists")
 
                 new_user = User(**user_data_dict)
-
                 new_user.hashed_password = hash_password(user_data_dict["password"])
-
                 session.add(new_user)
-                await session.commit()
 
+                # Commit se maneja automáticamente al final del bloque `async with session.begin()`
                 return new_user
-        except Exception as e:
-            logger.error(f"Error creating user: {e}")
-            raise e
+            except Exception as e:
+                logger.error(f"Error creating user: {e}")
+                raise e
