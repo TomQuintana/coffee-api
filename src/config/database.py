@@ -1,11 +1,11 @@
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel, create_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from .settings import settings
 
-async_engine = create_async_engine(settings.POSTGRESQL_URL, future=True)
+async_engine = AsyncEngine(create_engine(url=settings.POSTGRESQL_URL))
 
 
 async def init_db() -> None:
