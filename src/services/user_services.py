@@ -28,7 +28,6 @@ class UserService:
             user_data_dict["email"], user_data_dict["username"], session
         )
         if is_user_exists:
-            print("User already exists")
             raise HTTPException(status_code=400, detail="User already exists")
 
         new_user = User(**user_data_dict)
