@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 class UserService:
     async def get_user_by_email(self, email: str, username: str, session: AsyncSession):
+
         statement = select(User).where(User.email == email, User.username == username)
 
         result = await session.exec(statement)
@@ -47,3 +48,5 @@ class UserService:
         except Exception as e:
             logger.error(f"Error creating user: {e}")
             raise e
+        finally:
+            await session.close()
